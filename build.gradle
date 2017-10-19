@@ -17,7 +17,7 @@ apply plugin: 'uk.q3c.kaytee'
 
 kaytee {
     version {
-        number = "0.1.0.0"
+        number = "0.1.0.1"
     }
 
 }
@@ -43,4 +43,8 @@ dependencies {
     testCompile 'org.assertj:assertj-core:' + assertjVersion
 }
 sourceCompatibility = '1.8'
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.2.1'
+}
 
