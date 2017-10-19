@@ -3,6 +3,7 @@ package uk.q3c.krail.eventbus.mbassador;
 import net.engio.mbassy.listener.Handler;
 import net.engio.mbassy.listener.Listener;
 import org.junit.Test;
+import uk.q3c.krail.eventbus.SubscribeTo;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -15,6 +15,10 @@ package uk.q3c.krail.eventbus.mbassador;
 
 import com.google.inject.Inject;
 import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.bus.common.PubSubSupport;
+import uk.q3c.krail.eventbus.BusMessage;
+import uk.q3c.krail.eventbus.GlobalBus;
+import uk.q3c.krail.eventbus.GlobalBusProvider;
 
 
 public class DefaultGlobalBusProvider implements GlobalBusProvider {
@@ -30,5 +34,10 @@ public class DefaultGlobalBusProvider implements GlobalBusProvider {
     @Override
     public MBassador<BusMessage> get() {
         return globalBus;
+    }
+
+    @Override
+    public PubSubSupport<BusMessage> getGlobalBus() {
+        return get();
     }
 }

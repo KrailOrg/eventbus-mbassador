@@ -15,6 +15,11 @@ import com.google.inject.Provider;
 import com.google.inject.spi.InjectionListener;
 import net.engio.mbassy.bus.MBassador;
 import net.engio.mbassy.listener.Listener;
+import uk.q3c.krail.eventbus.BusMessage;
+import uk.q3c.krail.eventbus.EventBusAutoSubscriber;
+import uk.q3c.krail.eventbus.EventBusException;
+import uk.q3c.krail.eventbus.GlobalBus;
+import uk.q3c.krail.eventbus.SubscribeTo;
 
 import java.lang.annotation.Annotation;
 

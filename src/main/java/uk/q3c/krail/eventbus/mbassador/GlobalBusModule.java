@@ -32,6 +32,10 @@ import net.engio.mbassy.bus.error.IPublicationErrorHandler;
 import net.engio.mbassy.listener.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.q3c.krail.eventbus.BusMessage;
+import uk.q3c.krail.eventbus.EventBusAutoSubscriber;
+import uk.q3c.krail.eventbus.GlobalBus;
+import uk.q3c.krail.eventbus.GlobalBusProvider;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

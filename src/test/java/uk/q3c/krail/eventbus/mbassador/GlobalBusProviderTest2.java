@@ -3,6 +3,7 @@ package uk.q3c.krail.eventbus.mbassador;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.junit.Test;
+import uk.q3c.krail.eventbus.GlobalBusProvider;
 
 /**
  * Created by David Sowerby on 19 Oct 2017

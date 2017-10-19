@@ -16,6 +16,7 @@ package uk.q3c.krail.eventbus.mbassador;
 import net.engio.mbassy.bus.config.ConfigurationError;
 import net.engio.mbassy.bus.config.ConfigurationErrorHandler;
 import net.engio.mbassy.bus.config.IBusConfiguration;
+import uk.q3c.krail.eventbus.EventBusException;
 
 /**
  * Responds to an MBassador configuration error by simply re-throwing the exception
