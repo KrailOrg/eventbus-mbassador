@@ -9,29 +9,28 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package uk.q3c.krail.eventbus.mbassador;
+package uk.q3c.krail.eventbus.mbassador
 
-import net.engio.mbassy.bus.error.IPublicationErrorHandler;
-import net.engio.mbassy.bus.error.PublicationError;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.engio.mbassy.bus.error.IPublicationErrorHandler
+import net.engio.mbassy.bus.error.PublicationError
+import org.slf4j.LoggerFactory
 
 /**
  * The MBassador default is to use a ConsoleLogger.
- * <p>
+ *
+ *
  * Created by David Sowerby on 10/03/15.
  */
-public class DefaultEventBusErrorHandler implements IPublicationErrorHandler {
+class DefaultEventBusErrorHandler : IPublicationErrorHandler {
 
-    private static Logger log = LoggerFactory.getLogger(DefaultEventBusErrorHandler.class);
-
+    private val log = LoggerFactory.getLogger(this.javaClass.name)
     /**
      * Handle the given publication error.
      *
      * @param error The PublicationError to handle.
      */
-    @Override
-    public void handleError(PublicationError error) {
-        log.error("Error during message publication: {}", error);
+    override fun handleError(error: PublicationError) {
+        log.error("Error during message publication: {}", error)
     }
+
 }

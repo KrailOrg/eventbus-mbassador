@@ -11,25 +11,26 @@
  *
  */
 
-package uk.q3c.krail.eventbus.mbassador;
+package uk.q3c.krail.eventbus.mbassador
 
-import net.engio.mbassy.bus.config.ConfigurationError;
-import net.engio.mbassy.bus.config.ConfigurationErrorHandler;
-import net.engio.mbassy.bus.config.IBusConfiguration;
+import net.engio.mbassy.bus.config.ConfigurationError
+import net.engio.mbassy.bus.config.ConfigurationErrorHandler
+import net.engio.mbassy.bus.config.IBusConfiguration
+import uk.q3c.krail.eventbus.EventBusException
 
 /**
  * Responds to an MBassador configuration error by simply re-throwing the exception
- * <p>
+ *
+ *
  * Created by David Sowerby on 10/03/15.
  */
-public class DefaultEventBusConfigurationErrorHandler implements ConfigurationErrorHandler {
+class DefaultEventBusConfigurationErrorHandler : ConfigurationErrorHandler {
     /**
-     * Called when a misconfiguration is detected on a {@link IBusConfiguration}
+     * Called when a misconfiguration is detected on a [IBusConfiguration]
      *
      * @param error The error that represents the detected misconfiguration.
      */
-    @Override
-    public void handle(ConfigurationError error) {
-        throw new EventBusException("Event bus configuration incorrect", error);
+    override fun handle(error: ConfigurationError) {
+        throw EventBusException("Event bus configuration incorrect", error)
     }
 }
