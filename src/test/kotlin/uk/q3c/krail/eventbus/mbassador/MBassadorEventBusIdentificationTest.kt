@@ -83,6 +83,7 @@ class TestEventBusModule : EventBusModule() {
         whenever(nativeBus.post(any())).thenReturn(mockCommand)
         whenever(mockCommand.asynchronously()).thenReturn(aSyncPublication)
         whenever(mockCommand.now()).thenReturn(syncPublication)
+        @Suppress("UNCHECKED_CAST")
         return nativeBus as MBassador<T>
     }
 }

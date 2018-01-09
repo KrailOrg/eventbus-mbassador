@@ -24,7 +24,7 @@ import kotlin.reflect.KClass
  *
  * Created by David Sowerby on 13/03/15.
  */
-class DefaultEventBusAutoSubscriber @Inject constructor(private val messageBusProvider: MessageBusProvider, private val eventBusProvider: EventBusProvider) : EventBusAutoSubscriber {
+class MbassadorEventBusAutoSubscriber @Inject constructor(private val messageBusProvider: MessageBusProvider, private val eventBusProvider: EventBusProvider) : EventBusAutoSubscriber {
 
     /**
      * Invoked by Guice after it injects the fields and methods of instance.  `injectee` must have a [Listener] annotation in order to get this
@@ -44,13 +44,11 @@ class DefaultEventBusAutoSubscriber @Inject constructor(private val messageBusPr
         } else { //defined by SubscribeTo
             subscriptions = subscribeTo.value.toMutableList()
         }
+        // subscribe for the annotations we recognise, but ignore others - they may be managed by another InjectionListener
         for (target in subscriptions) {
             when (target) {
                 GlobalMessageBus::class -> messageBusProvider.get().subscribe(injectee)
                 GlobalEventBus::class -> eventBusProvider.get().subscribe(injectee)
-                else -> {
-                    throw EventBusException(target.qualifiedName + " is not a valid event bus annotation")
-                }
             }
 
         }

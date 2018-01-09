@@ -160,7 +160,7 @@ public class EventBusModule extends AbstractModule {
          * @param <I>
          */
         public <I> void hear(TypeLiteral<I> type, TypeEncounter<I> encounter) {
-            encounter.register(new DefaultEventBusAutoSubscriber(messageBusProviderProvider.get(), eventBusProviderProvider.get()));
+            encounter.register(new MbassadorEventBusAutoSubscriber(messageBusProviderProvider.get(), eventBusProviderProvider.get()));
         }
     }
 }

@@ -47,12 +47,18 @@ ext.slf4jVersion = '1.7.6'
 
 kaytee {
     version {
-        number = "0.3.0.1"
+        number = "0.4.0.0"
     }
 }
 
 bintray {
     user = 'dsowerby'
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 }
 
 dependencies {
