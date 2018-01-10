@@ -15,8 +15,10 @@ package uk.q3c.krail.eventbus.mbassador;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Binder;
+import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.AbstractMatcher;
 import com.google.inject.spi.TypeEncounter;
@@ -28,8 +30,8 @@ import net.engio.mbassy.bus.config.IBusConfiguration;
 import net.engio.mbassy.bus.error.IPublicationErrorHandler;
 import net.engio.mbassy.listener.Listener;
 import uk.q3c.krail.eventbus.BusMessage;
-import uk.q3c.krail.eventbus.EventBusProvider;
-import uk.q3c.krail.eventbus.MessageBusProvider;
+import uk.q3c.krail.eventbus.EventBus;
+import uk.q3c.krail.eventbus.MessageBus;
 
 /**
  * Configures MBassador EventBus and MessageBus implementations for Singleton scope.
@@ -52,25 +54,37 @@ public class EventBusModule extends AbstractModule {
          * This avoids an annotated constructor parameter in a super-class being ignored / overridden in a sub-class
          */
 
-        final Provider<MBassadorMessageBusProvider> messageBusProviderProvider = this.getProvider(MBassadorMessageBusProvider.class);
-        final Provider<MBassadorEventBusProvider> eventBusProviderProvider = this.getProvider(MBassadorEventBusProvider.class);
+        TypeLiteral<Provider<MessageBus>> ppm = new TypeLiteral<Provider<MessageBus>>() {
+
+        };
+        TypeLiteral<Provider<EventBus>> ppe = new TypeLiteral<Provider<EventBus>>() {
+
+        };
+        Key<Provider<MessageBus>> keym = Key.get(ppm);
+        Key<Provider<EventBus>> keye = Key.get(ppe);
+
+        final Provider<Provider<MessageBus>> messageBusProviderProvider = this.getProvider(keym);
+        final Provider<Provider<EventBus>> eventBusProviderProvider = this.getProvider(keye);
 
 
         bindListener(new ListenerAnnotationMatcher(), new BusTypeListener(messageBusProviderProvider, eventBusProviderProvider));
         bindPublicationErrorHandlers();
         bindMessageBusConfiguration();
-        bindMessageBusProvider();
-        bindEventBusProvider();
 
 
     }
 
-    protected void bindMessageBusProvider() {
-        bind(MessageBusProvider.class).to(MBassadorMessageBusProvider.class);
+    @Provides
+    @Singleton
+    private MessageBus bindMessageBus(MBassador<BusMessage> nativeBus) {
+        return new MBassadorMessageBus(nativeBus);
+
     }
 
-    protected void bindEventBusProvider() {
-        bind(EventBusProvider.class).to(MBassadorEventBusProvider.class);
+    @Provides
+    @Singleton
+    private EventBus bindEventBus(MBassador<Object> nativeBus) {
+        return new MBassadorEventBus(nativeBus);
     }
 
 
@@ -138,15 +152,15 @@ public class EventBusModule extends AbstractModule {
     }
 
     private static class BusTypeListener implements TypeListener {
-        private Provider<MBassadorMessageBusProvider> messageBusProviderProvider;
-        private Provider<MBassadorEventBusProvider> eventBusProviderProvider;
+        private Provider<Provider<MessageBus>> messageBusProviderProvider;
+        private Provider<Provider<EventBus>> eventBusProviderProvider;
 
         /**
          * We need a "provider provider" because this listener is invoked before injector is fully resolved
          *
          * @param eventBusProviderProvider
          */
-        public BusTypeListener(Provider<MBassadorMessageBusProvider> messageBusProviderProvider, Provider<MBassadorEventBusProvider> eventBusProviderProvider) {
+        public BusTypeListener(Provider<Provider<MessageBus>> messageBusProviderProvider, Provider<Provider<EventBus>> eventBusProviderProvider) {
             this.messageBusProviderProvider = messageBusProviderProvider;
             this.eventBusProviderProvider = eventBusProviderProvider;
         }
@@ -160,7 +174,7 @@ public class EventBusModule extends AbstractModule {
          * @param <I>
          */
         public <I> void hear(TypeLiteral<I> type, TypeEncounter<I> encounter) {
-            encounter.register(new MbassadorEventBusAutoSubscriber(messageBusProviderProvider.get(), eventBusProviderProvider.get()));
+            encounter.register(new MBassadorEventBusAutoSubscriber(messageBusProviderProvider, eventBusProviderProvider));
         }
     }
 }

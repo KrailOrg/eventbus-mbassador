@@ -5,8 +5,8 @@ import com.google.inject.Injector
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
-import uk.q3c.krail.eventbus.EventBusProvider
-import uk.q3c.krail.eventbus.MessageBusProvider
+import uk.q3c.krail.eventbus.EventBus
+import uk.q3c.krail.eventbus.MessageBus
 
 /**
  * Created by David Sowerby on 07 Jan 2018
@@ -22,8 +22,8 @@ class EventBusModuleTest {
 
     @Test
     fun bindings() {
-        assertThat(injector.getInstance(MessageBusProvider::class.java)).isInstanceOf(MBassadorMessageBusProvider::class.java)
-        assertThat(injector.getInstance(EventBusProvider::class.java)).isInstanceOf(MBassadorEventBusProvider::class.java)
+        assertThat(injector.getInstance(MessageBus::class.java)).isInstanceOf(MBassadorMessageBus::class.java)
+        assertThat(injector.getInstance(EventBus::class.java)).isInstanceOf(MBassadorEventBus::class.java)
     }
 
     @Test
@@ -31,8 +31,8 @@ class EventBusModuleTest {
 
         // when:
 
-        var pEvent = injector.getInstance(EventBusProvider::class.java)
-        var pMessage = injector.getInstance(MessageBusProvider::class.java)
+        val pEvent = injector.getProvider(EventBus::class.java)
+        val pMessage = injector.getProvider(MessageBus::class.java)
 
         // then:
 

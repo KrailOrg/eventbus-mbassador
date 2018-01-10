@@ -12,6 +12,7 @@
 package uk.q3c.krail.eventbus.mbassador
 
 import com.google.inject.Inject
+import com.google.inject.Provider
 import com.google.inject.spi.InjectionListener
 import net.engio.mbassy.listener.Listener
 import uk.q3c.krail.eventbus.*
@@ -19,12 +20,12 @@ import kotlin.reflect.KClass
 
 /**
  * Provides logic for automatically subscribing to event buses.  This is used as an [InjectionListener], and cannot therefore use injection in its
- * constructor
+ * constructor.  See [SubscribeTo] for expected behaviour
  *
  *
  * Created by David Sowerby on 13/03/15.
  */
-class MbassadorEventBusAutoSubscriber @Inject constructor(private val messageBusProvider: MessageBusProvider, private val eventBusProvider: EventBusProvider) : EventBusAutoSubscriber {
+class MBassadorEventBusAutoSubscriber @Inject constructor(val messageBusProvider: Provider<Provider<MessageBus>>, val eventBusProvider: Provider<Provider<EventBus>>) : EventBusAutoSubscriber {
 
     /**
      * Invoked by Guice after it injects the fields and methods of instance.  `injectee` must have a [Listener] annotation in order to get this
@@ -47,8 +48,8 @@ class MbassadorEventBusAutoSubscriber @Inject constructor(private val messageBus
         // subscribe for the annotations we recognise, but ignore others - they may be managed by another InjectionListener
         for (target in subscriptions) {
             when (target) {
-                GlobalMessageBus::class -> messageBusProvider.get().subscribe(injectee)
-                GlobalEventBus::class -> eventBusProvider.get().subscribe(injectee)
+                GlobalMessageBus::class -> messageBusProvider.get().get().subscribe(injectee)
+                GlobalEventBus::class -> eventBusProvider.get().get().subscribe(injectee)
             }
 
         }

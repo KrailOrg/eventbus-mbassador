@@ -13,12 +13,14 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
+import uk.q3c.krail.eventbus.EventBus
+import uk.q3c.krail.eventbus.MessageBus
 
 /**
  * Created by David Sowerby on 07 Jan 2018
  */
 class MBassadorEventBusIdentificationTest {
-    private lateinit var provider: MBassadorMessageBusProvider
+    private lateinit var messageBus: MessageBus
     private lateinit var consumer: MessageConsumerExplicitlySubscribedToGlobalMessageBus
     private lateinit var consumer2: MessageConsumerShouldDefaultToGlobalMessageBus
 
@@ -27,7 +29,7 @@ class MBassadorEventBusIdentificationTest {
     @Before
     fun setup() {
         val injector = Guice.createInjector(EventBusModule())
-        provider = injector.getInstance(MBassadorMessageBusProvider::class.java)
+        messageBus = injector.getInstance(MessageBus::class.java)
         consumer = injector.getInstance(MessageConsumerExplicitlySubscribedToGlobalMessageBus::class.java)
         consumer2 = injector.getInstance(MessageConsumerShouldDefaultToGlobalMessageBus::class.java)
     }
@@ -39,27 +41,27 @@ class MBassadorEventBusIdentificationTest {
 
     @Test
     fun implementationName() {
-        assertThat(provider.get().implementationName()).isEqualTo("MBassador")
+        assertThat(messageBus.implementationName()).isEqualTo("MBassador")
     }
 
     @Test
     fun implementation() {
-        assertThat(provider.get().implementation()).isInstanceOf(MBassador::class.java)
+        assertThat(messageBus.implementation()).isInstanceOf(MBassador::class.java)
     }
 
     @Test
     fun index() {
-        assertThat(provider.get().index()).isEqualTo(1)
+        assertThat(messageBus.index()).isEqualTo(1)
     }
 
     @Test
     fun scope() {
-        assertThat(provider.get().scope()).isEqualTo("Singleton")
+        assertThat(messageBus.scope()).isEqualTo("Singleton")
     }
 
     @Test
     fun busId() {
-        assertThat(provider.get().busId()).isEqualTo("Global Message Bus")
+        assertThat(messageBus.busId()).isEqualTo("Global Message Bus")
 
     }
 
@@ -92,15 +94,15 @@ class TestEventBusModule : EventBusModule() {
  * Verifies that the native bus (MBassador) implementation is correctly wrapped
  */
 class MBassadorEventBusWrappingTest {
-    private lateinit var provider: MBassadorMessageBusProvider
-    private lateinit var provider1: MBassadorEventBusProvider
+    private lateinit var messageBus: MessageBus
+    private lateinit var eventBus: EventBus
 
 
     @Before
     fun setup() {
         val injector = Guice.createInjector(TestEventBusModule())
-        provider = injector.getInstance(MBassadorMessageBusProvider::class.java)
-        provider1 = injector.getInstance(MBassadorEventBusProvider::class.java)
+        messageBus = injector.getInstance(MessageBus::class.java)
+        eventBus = injector.getInstance(EventBus::class.java)
     }
 
 
@@ -108,7 +110,7 @@ class MBassadorEventBusWrappingTest {
     @Test
     fun hasPendingMessages() {
         // when:
-        provider.get().hasPendingMessages()
+        messageBus.hasPendingMessages()
 
         // then:
         verify(nativeBus).hasPendingMessages()
@@ -117,7 +119,7 @@ class MBassadorEventBusWrappingTest {
     @Test
     fun publishASync() {
         // when:
-        val status = provider.get().publishASync(TestMessage("Who me"))
+        val status = messageBus.publishASync(TestMessage("Who me"))
 
         // then:
         verify(mockCommand).asynchronously()
@@ -128,7 +130,7 @@ class MBassadorEventBusWrappingTest {
     @Test
     fun publishSync() {
         // when:
-        val status = provider.get().publishSync(TestMessage("Who me"))
+        val status = messageBus.publishSync(TestMessage("Who me"))
 
         // then:
         verify(mockCommand).now()
@@ -141,7 +143,7 @@ class MBassadorEventBusWrappingTest {
         val a = Any()
 
         // when:
-        provider.get().subscribe(a)
+        messageBus.subscribe(a)
 
         // then:
         verify(nativeBus).subscribe(a)
@@ -153,7 +155,7 @@ class MBassadorEventBusWrappingTest {
         val a = Any()
 
         // when:
-        provider.get().unsubscribe(a)
+        messageBus.unsubscribe(a)
 
         // then:
         verify(nativeBus).unsubscribe(a)
