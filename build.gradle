@@ -11,8 +11,8 @@
  *
  */
 buildscript {
-    ext.kotlin_version = '1.1.4-3'
-    ext.kaytee_plugin_version = "0.18.10.0"
+    ext.kotlin_version = '1.2.31'
+    ext.kaytee_plugin_version = "0.20.1.0"
     repositories {
         jcenter()
     }
@@ -47,7 +47,7 @@ ext.slf4jVersion = '1.7.6'
 
 kaytee {
     version {
-        number = "0.5.0.0"
+        number = "0.6.0.0"
     }
 }
 
@@ -70,7 +70,7 @@ dependencies {
     compile 'org.slf4j:slf4j-api:' + slf4jVersion
     compile 'ch.qos.logback:logback-classic:1.1.2'
     compile 'ch.qos.logback:logback-core:1.1.2'
-    compile 'uk.q3c.krail:eventbus-api:0.11.0.0'
+    compile 'uk.q3c.krail:eventbus-api:0.12.0.0'
 
     compile 'com.google.inject:guice:4.1.0'
     compile "net.engio:mbassador:1.3.1"
